@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+
+<title>Jupyter and Python for Data Analysis</title>
+
+<meta name="description" content="Jupyter and Python for Data Analysis">
+
+  <meta name="author" content="Tom Augspurger" />
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/theme/black.css" id="theme">
+<link rel="stylesheet" href="style.css">
+
+
+<!-- For syntax highlighting -->
+  <link rel="stylesheet" href="lib/css/zenburn.css">
+
+
+<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+<script>
+  document.write( '<link rel="stylesheet" href="css/print/' +
+    ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + 
+    '.css" type="text/css" media="print">' );
+</script>
+
+<!--[if lt IE 9]>
+<script src="lib/js/html5shiv.js"></script>
+<![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+
+<!-- Any section element inside of this container is displayed as a slide -->
+<div class="slides">
+
+<section>
+<h1>Jupyter and Python for Data Analysis</h1>
+<h3>Tom Augspurger</h3>
+<p>
+<h4>2017-06-08</h4>
+</p>
+</section>  
+
+
+<section id="topics" class="level3">
+<h3>Topics</h3>
+<ul>
+<li>Python: Brief overview</li>
+<li>Jupyter: Cross-language project supporting interactive data science</li>
+<li>Pandas: High-performance data structures for data analysis in Python</li>
+<li>Dask: Flexible parallel computing</li>
+</ul>
+</section>
+<section id="goals" class="level3">
+<h3>Goals</h3>
+<ul>
+<li><em>Not</em> to teach you Python</li>
+<li>Explore cross-language tools</li>
+<li>Compare and contrast, learn from each other</li>
+</ul>
+</section>
+<section id="a-bit-of-history" class="level3">
+<h3>A bit of History</h3>
+<ul>
+<li>First release in 1991</li>
+<li>Popular as a “glue” language</li>
+<li>Benefiting from the rise of data science</li>
+</ul>
+</section>
+<section id="trends" class="level3">
+<h3>Trends</h3>
+<section data-background-color="#fefefe">
+<img src="figures/trends.svg" />
+</section>
+</section>
+<section id="scientific-computing" class="level3">
+<h3>Scientific Computing</h3>
+<ul>
+<li>Powerful data-structures (NumPy, pandas)</li>
+<li>Visualization (matplotlib)</li>
+<li>Statistics and Machine Learning (scikit-learn, statsmodels, PyMC3, tensorflow, …)</li>
+</ul>
+</section>
+<section id="jupyter" class="level3">
+<h3>Jupyter</h3>
+<p>IPython: an interactive python shell <img src="figures/ipython-6-screenshot.png" /></p>
+</section>
+<section id="jupyter-notebook" class="level3">
+<h3>Jupyter Notebook</h3>
+<figure>
+<img src="figures/jupyter-notebook-default.png" style="width:70.0%" />
+</figure>
+<ul>
+<li>A web application</li>
+<li>More importantly, a file format</li>
+<li>Enables things like nbviewer</li>
+</ul>
+</section>
+<section id="nbviewer" class="level3">
+<h3>nbviewer</h3>
+<iframe data-src="http://nbviewer.jupyter.org/" width="800" height="800">
+</iframe>
+</section>
+<section id="jupyter-messaging-protocol" class="level3">
+<h3>Jupyter Messaging Protocol</h3>
+<figure>
+<img src="figures/frontend-kernel.png" style="width:50.0%" />
+</figure>
+<p>Kernels for &gt; 50 languages (including R)</p>
+</section>
+<section id="irkernel" class="level3">
+<h3>IRKernel</h3>
+<p><em>Demo</em></p>
+</section>
+<section id="section" class="level3">
+<h3><img src="figures/pandas_logo.png" /></h3>
+<ul>
+<li>Implements high-performance data structures for tabular data</li>
+<li>Many familiar operations (groupby, join)</li>
+<li>Handles missing data</li>
+</ul>
+</section>
+<section id="pandas" class="level3">
+<h3>Pandas</h3>
+<p><em>Demo</em></p>
+</section>
+<section id="dask" class="level3">
+<h3>Dask</h3>
+<blockquote>
+<ul>
+<li>Python has a great, diverse ecosystem for scientific computing</li>
+<li>but it’s mostly restricted to a single core</li>
+</ul>
+</blockquote>
+</section>
+<section id="collections-dags-and-schedulers" class="level3">
+<h3>Collections, DAGs, and schedulers</h3>
+<figure>
+<img src="figures/collections-schedulers.png" />
+</figure>
+<ul>
+<li>Take a familiar API</li>
+<li>Translate operations to a task graph</li>
+<li>Have smart schedulers execute the tasks</li>
+<li>Built on years of work by Python’s networking community</li>
+</ul>
+</section>
+<section id="section-1" class="level3">
+<h3></h3>
+<p>Dask Collections Build Task Graphs</p>
+<hr />
+<p>Dask Schedulers Execute Task Graphs</p>
+</section>
+<section id="d-array" class="level3">
+<h3>1D-Array</h3>
+<p><img src="figures/array-1d.svg"></p>
+<pre><code>&gt;&gt;&gt; np.ones((15,))
+array([ 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.])
+
+&gt;&gt;&gt; x = da.ones((15,), chunks=(5,))</code></pre>
+</section>
+<section id="d-array-1" class="level3">
+<h3>1D-Array</h3>
+<p><img src="figures/array-1d-sum.svg" width="30%"></p>
+<pre><code>x = da.ones((15,), chunks=(5,))
+x.sum()</code></pre>
+</section>
+<section id="nd-array---sum" class="level3">
+<h3>ND-Array - Sum</h3>
+<p><img src="figures/array-sum.svg"></p>
+<pre><code>x = da.ones((15, 15), chunks=(5, 5))
+x.sum(axis=0)</code></pre>
+</section>
+<section id="nd-array---transpose" class="level3">
+<h3>ND-Array - Transpose</h3>
+<p><img src="figures/array-xxT.svg"></p>
+<pre><code>x = da.ones((15, 15), chunks=(5, 5))
+x + x.T</code></pre>
+</section>
+<section id="nd-array---matrix-multiply" class="level3">
+<h3>ND-Array - Matrix Multiply</h3>
+<p><img src="figures/array-xdotxT.svg"></p>
+<pre><code>x = da.ones((15, 15), chunks=(5, 5))
+x.dot(x.T + 1)</code></pre>
+</section>
+<section id="nd-array---compound-operations" class="level3">
+<h3>ND-Array - Compound Operations</h3>
+<p><img src="figures/array-xdotxT-mean.svg"></p>
+<pre><code>x = da.ones((15, 15), chunks=(5, 5))
+x.dot(x.T + 1) - x.mean()</code></pre>
+</section>
+<section id="nd-array---compound-operations-1" class="level3">
+<h3>ND-Array - Compound Operations</h3>
+<p><img src="figures/array-xdotxT-mean-std.svg"></p>
+<pre><code>import dask.array as da
+x = da.ones((15, 15), chunks=(5, 5))
+y = (x.dot(x.T + 1) - x.mean()).std()</code></pre>
+</section>
+<section id="dask-1" class="level3">
+<h3>Dask</h3>
+<p><em>Demo</em></p>
+</section>
+<section id="summary" class="level3">
+<h3>Summary</h3>
+<ul>
+<li>Jupyter for cross-language tools</li>
+<li>Pandas for high-performance data-structures</li>
+<li>Dask for parallelizing existing python workflows</li>
+</ul>
+</section>
+<section id="thanks" class="level3">
+<h3>Thanks!</h3>
+</section>
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+  // Full list of configuration options available here:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: false,
+
+  // available themes are in /css/theme
+      theme: Reveal.getQueryHash().theme || 'black', 
+  
+  // default/cube/page/concave/zoom/linear/fade/none
+      transition: Reveal.getQueryHash().transition || 'none',
+  
+  // Optional libraries used to extend on reveal.js
+  dependencies: [
+    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+    { src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+    // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+  ]
+  });
+
+</script>
+
+</body>
+</html>
