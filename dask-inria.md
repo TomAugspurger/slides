@@ -152,7 +152,7 @@ class: center, middle, title
 # dask-ml
 
 
-1. Collection of experiements into a single package
+1. Collection of experiments into a single package
     - `dask-searchcv`
     - `dask-glm`
     - `distributed.joblib`
