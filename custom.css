@@ -1,0 +1,38 @@
+body {
+    font-family: 'Optima', 'Droid Serif';
+    font-size: 30px;
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Futura', 'Yanone Kaffeesatz';
+    font-weight: normal;
+}
+
+.title {
+    vertical-align: middle;
+    text-align: center;
+    background-color: #353639;
+    color: #FEFEFE;
+}
+
+.remark-code,
+.remark-inline-code {
+    font-family: 'Input Mono', 'Ubuntu Mono';
+}
+
+.remark-slide-content {
+    font-size: 40px;
+}
+
+img.center {
+    display: block;
+    margin: 0 auto;
+}
+
+img {
+    display: block;
+    margin: auto;
+}
+
