@@ -2,7 +2,7 @@ class: title
 
 # Getting Started in Open Source
 
-The why and the how.
+The *why* and *how*
 
 ---
 
@@ -13,14 +13,6 @@ I work at Anaconda, Inc.
 We sell [Anaconda Enterprise](https://www.anaconda.com/enterprise/).
 
 We support open source.
-
----
-
-class: center, middle
-
-# Contributing to Open Source
-
-Why & How
 
 ---
 
@@ -101,6 +93,7 @@ This is an under-appreciated skill
 
 - New users uniquely positioned to write docs
 - Easier to see APIs that are unintuitive
+- Experienced users can help review pull requests
 
 ---
 
