@@ -10,6 +10,8 @@ The *why* and *how*
 
 I work at Anaconda, Inc.
 
+We provide the [Anaconda Python / R Distribution](https://www.anaconda.com/distribution/).
+
 We sell [Anaconda Enterprise](https://www.anaconda.com/enterprise/).
 
 We support open source.
