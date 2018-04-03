@@ -34,12 +34,6 @@ class: title
 
 ---
 
-# Influence projects you care about
-
-<img src="figures/ip-proposal.png">
-
----
-
 # Résumé
 
 <img src="figures/resume.png">
@@ -63,6 +57,8 @@ class: title
 
 # You have other things to do
 
+Life's too short
+
 ---
 
 class: title
@@ -76,7 +72,7 @@ Ways to Contribute
 # Community Building
 
 - Stack Overflow & mailing lists
-- Blogging posts & conference talks
+- Blogging & talks
 
 ---
 
@@ -104,6 +100,8 @@ class: title
 ---
 
 # Find an Interesting Topic
+
+- Consider contributing to an existing project
 
 ---
 
