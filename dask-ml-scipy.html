@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Scalable Machine Learning with Dask</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Optima', 'Droid Serif'; font-size: 30px; }
+
+      h1, h2, h3 {
+        font-family: 'Futura', 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+
+      .remark-code, .remark-inline-code { font-family: 'Input Mono', 'Ubuntu Mono'; }
+      .remark-slide-content { font-size: 30px; }
+
+      img {
+           display: block;
+           margin: auto;
+       }
+
+      .left { margin-left: 0px }
+
+      .title {
+          background-color: #353639;
+          color: #FEFEFE;
+      }
+
+
+     .wrapped { display: flex; }
+     .wrapped-left { flex: 0 0 50%; }
+     .wrapped-right {
+         flex: 1;
+     }
+
+
+    </style>
+  </head>
+  <body>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create({
+          sourceUrl: 'dask-ml-scipy.md',
+          ratio: '16:9',
+          highlightLines: true
+      });
+    </script>
+  </body>
+</html>
