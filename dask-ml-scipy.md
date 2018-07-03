@@ -6,7 +6,15 @@ class: center, middle, title
 
 ---
 
-# Python
+# Motivation
+
+- Context: Python is great for data analysis
+- Problem: "It doesn't scale"
+- Goal: Enable machine learning on larger datasets and larger problems
+
+---
+
+# Context
 
 - Great libraries for data analytics, but
 - NumPy and pandas are essentially limited to a single thread
@@ -140,10 +148,21 @@ We want to model it
 
 class: center, middle, title
 
-# dask-ml
+# Dask-ML
 
 scalable machine learning
 
+---
+
+# Dask-ML
+
+- Estimators and utilities for machine learning
+- Builds on Dask
+
+  * Dask arrays and dataframes for large datasets
+  * Dask cluster for distributed computation
+  * Flexible task scheduling for sophisticated algorithms
+  
 ---
 
 class: center, middle, title
