@@ -2,7 +2,7 @@ class: center, middle, title
 
 # Scalable Machine Learning with Dask
 
-<img src="figures/dask-logo.svg" width="25%">
+<img src="figures/dask-logo.svg" width="25%"/>
 
 ---
 
@@ -12,13 +12,11 @@ class: center, middle, title
 - Problem: "It doesn't scale"
 - Goal: Enable machine learning on larger datasets and larger problems
 
----
-
-# Context
-
-- Great libraries for data analytics, but
-- NumPy and pandas are essentially limited to a single thread
-- Scikit-learn is essentially limited to a single machine
+???
+Python has a rich ecosystem of libraries for data analysis.
+Some are under the impression that it "doesn't scale" (GIL, not "production-ready", etc.).
+Dask is attempting to solve this for a wide class of problems.
+Dask-ML is focused on scalable machine learning.
 
 ---
 
@@ -35,8 +33,13 @@ Brief (5 minute) introduction to what dask provides before onto `dask-ml`.
 
 # Dask
 
-- Familiar API for large datasets
-- Parallel, distributed computation
+
+* Familiar API...
+
+* for working with large datasets...
+
+* in parallel using many threads / processes / machines
+
 
 ???
 Dask provides users with containers to manipulate large datasets using
@@ -99,50 +102,27 @@ Name: transaction_amt, dtype: int64
 # Dask Collections Build Task Graphs
 
 
-<img src="figures/total-by-employee-simple.png" width="100%">
+<img src="figures/total-by-employee-simple.png" width="100%"/>
 
 - Results aren't computed immediately
 - dask's schedulers `compute` graphs in parallel on many threads, processes, or machines
 
 ---
 
-# Familiar API for Large Datasets
+# Schedulers Execute Task Graphs
 
-```python
-In [5]: total_by_employee = (
-   ...:    indiv.groupby('employer')
-   ...:        .transaction_amt.sum()
-   ...:        .nlargest(10)
-   ...:)
+<img src="figures/grid_search_schedule.gif" width="100%"/>
 
-
-In [6]: avg_by_occupation = (
-   ...:     indiv.groupby("occupation")
-   ...:         .transaction_amt.mean()
-   ...:         .nlargest(10)
-   ...: )
-   
-In [7]: results = dask.compute(total_by_employee,
-  ...:                        avg_by_occupation)
-```
+* Execute items in parallel
+* Execute using many threads / processes / machines
 
 ---
 
-class: center, middle
+# Dask Summary
 
-Dask Schedulers Execute Task Graphs
-
-<video src="figures/compute-many.webm" width=50% autoplay controls loop/>
-
----
-
-class: center, middle
-
-We have a container for our data
-
-<hr>
-
-We want to model it
+1. Write familiar NumPy / pandas / scikit-learn code
+2. A task graph is built
+3. Task graph is executed in parallel, producing a concrete result
 
 ---
 
@@ -192,94 +172,137 @@ CPU Bound / RAM Bound
 
 ---
 
-# Fitting Large Models
+class: center, middle, title
 
-1. You have an ensemble of many estimators
-2. You have many hyper-parameters
-  
-???
-This section shows `dask_ml.joblib`, how to use your `dask.distributed` cluster
-to fit a regular scikit-learn model on an dataset that fits in memory. This uses
-all the nodes on your cluster to do the individual tasks inside scikit-learn.
+# Distributed Scikit-Learn
+
+For CPU-Bound Problems
 
 ---
 
-# Distributed Scikit-Learn: Joblib
+# Distributed Scikit-Learn
 
-- Each worker gets a copy of the data
-- Tasks parallelized by `n_jobs`
+- Dask provides the cluster computing
+- NumPy for arrays (full dataset fits in each worker's memory)
+- Scikit-Learn provides the estimators
+
+---
+
+# Scikit-Learn
 
 ```python
-from sklearn.externals import joblib
-from dask.distributed import Client
+from sklearn.svm import SVR
+from sklearn.model_selection import GridSearchCV
+# ...
+# ...
 
-client = Client('scheduler-address')
-clf = RandomForstClassifier(n_estimators=200, n_jobs=-1)
+est = GridSearchCV(SVR(), param_grid, n_jobs=-1)
+
+
+est.fit(X, y)
+```
+
+<img src="figures/joblib.png" width="85%"/>
+
+---
+
+# Scikit-Learn (Distributed)
+
+
+```python
+from sklearn.svm import SVR
+from sklearn.model_selection import GridSearchCV
+from sklearn.externals import joblib
+import dask_ml.joblib
+
+est = GridSearchCV(SVR(), param_grid, n_jobs=-1)
 
 with joblib.parallel_backend("dask", scatter=[X, y]):
-    clf.fit(X, y)
+    est.fit(X, y)
 ```
+
+<img src="figures/joblib-distributed.png" width="85%"/>
 
 ---
 
 class: center, middle
 
-Distributed Scikit-Learn: Joblib
+Distributed Scikit-Learn
 
-<video src="figures/distributed-joblib-cluster.webm" width=50% autoplay controls loop>
-</video>
-
+<iframe src="https://drive.google.com/file/d/1ZR_1e1_9VMpa7dKGlI5YmW-pD9UpQ0cx/preview" width="888" height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
 
 ???
-This video shows the distributed UI while fitting a `RandomForstClassifier` with
-200 trees. Each tree is an individual task. Fitting the 200 trees is an
-embarrassingly parallel job, and can be done across the cluster.
+Distributed Grid Search
+
 
 ---
 
-# Parallel Post-Fitting Tasks
+class: center, middle, title
 
-Train on a small dataset normally
+# Distributed Training
+
+For RAM-bound problems
+
+---
+
+# Caveat: Distributed ML is complex
+
+* Do you need all the data?
+  - Plot a learning curve. Sample your data.
+* Do you need all the data *for training*?
+  - `dask_ml` easily parallelizes predict, score, etc. for any estimator.
+
+---
+
+# Distributed Training
+
+Two Options:
+
+1. Dask-ML's `Incremetnal` + Scikit-Learn's `partial_fit`
+2. Dask-ML re-implements some estimators
+
+---
+
+# `partial_fit`
+
+- Scikit-Learn supports incremental learning with `partial_fit`
+- Estimators train on blocks of data
+- Dask's collections are already blocked!
+
+---
+
+# `partial_fit`
 
 ```python
-In [1]: from sklearn.svm import SupportVectorClassifier
-   ...: from dask_ml.wrappers import ParallelPostFit
-   ...:
-   ...: clf = ParallelPostFit(SupportVectorClassifier())
-   ...:
-   ...: X, y = make_classification(n_samples=100_000, chunks=10_000)
-   ...:
-   ...: clf.fit(X, y)
+from sklearn.linear_model import SGDClassifier
+# ...
+
+clf = SGDClassifier()
+
+for X, y in data_stream:
+    clf.partial_fit(X, y)
 ```
 
 ---
 
-# Parallel Post-Fitting Tasks
-
-
-Transform / Predict in parallel
+# `Incremental + partial_fit`
 
 ```python
-In [2]: clf.predict_proba(X)
-Out[2]: dask.array<predict_proba, shape=(100000, 2),
-                   dtype=float64, chunksize=(10000, 2)>
+from sklearn.linear_model import SGDClassifier
+from dask_ml.wrappers import Incremental
 
-In [3]: clf.predict_proba(X).compute()
-Out[3]:
-array([[0.03456433, 0.96543567],
-       [0.01632352, 0.98367648],
-       [0.16356299, 0.83643701],
-       ...,
-       [0.0150388 , 0.9849612 ],
-       [0.98526749, 0.01473251],
-       [0.01522759, 0.98477241]])
+clf = SGDClassifier()
+inc = Incremental(clf, scoring='accuracy')
+inc.fit(X_big, y_big)
 ```
 
 ---
 
-# Parallel Post-Fitting Tasks
+# `Incremental + partial_fit`
 
-<img src="figures/sphx_glr_plot_parallel_postfit_001.png"/>
+- Distributes any estimator implementing `partial_fit`
+- Training is distributed, but sequential
+- Can be used with within `Pipeline`, `GridSearchCV` for parallelism
 
 ---
 
@@ -287,43 +310,34 @@ class: center, middle, title
 
 # Distributed Estimators
 
-*For training on large datasets*
-
-???
-For when you want to train on a larger-than-memory dataset.
-
----
-
-# Distributed Systems
-
-<img src="figures/tensorflow.png" width="15%" class="left">
-
-```python
-import dask_ml.tensorflow
-
-tf_net, dask_net = dask_ml.tensorflow.start_tensorflow(client)
-```
-
-<img src="figures/xgboost.png" width="20%" class="left">
-
-
-```python
-import dask_ml.xgboost
-
-xgb = dask_ml.xgboost.train(X, y)
-```
-
 ---
 
 # Distributed Estimators
 
-- `KMeans`
-- `SpectralClustering`
-- `linear_models`
+Dask-ML re-implements *some* algorithms
+
+* Generalized Linear Models
+  * `LogisticRegression`, `LinearRegression`, ...
+* Clustering 
+  * `KMeans(init='k-means||')`, `SpectralClustering`, ...
+* Preprocessing
+  * `QuantileTransformer`, `RobustScalar`, ...
+* Dimensionality Reduction
+  * `PCA`, `TruncatedSVD`
+* ...
+
+---
+
+class: center
+
+## Distributed K-Means
+
+<iframe src="https://drive.google.com/file/d/1lxVB4q1T9Omd0Prcwjv5kQxDwh6AY0F4/preview" width="888" height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
 
 ---
 
 # Thanks!
 
-- http://dask-ml.readthedocs.io/en/latest/
+- https://dask.pydata.org
+- https://dask-ml.readthedocs.io/en/latest/
 - https://github.com/dask/dask-ml
