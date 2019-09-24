@@ -10,7 +10,7 @@
 		$< -o $@
 
 serve:
-	python3 -m http.server
+	python3 -m http.server&
 
 remark:
 	git clone https://github.com/gnab/remark/
